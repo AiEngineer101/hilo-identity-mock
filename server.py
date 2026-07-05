@@ -2,7 +2,7 @@
 """Hilo identity-lookup mock backend + test page for Intercom soft-identity testing."""
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse, parse_qs, unquote
-import json, sys, os
+import json, sys, os, re
 
 DB = {
     "dhruv.bais+test1@aktiia.com": {"customer_id": "TEST-001", "name": "Test User One",   "plan": "premium"},
@@ -11,7 +11,7 @@ DB = {
     "dhruv.bais@aktiia.com":       {"customer_id": "DHRUV-001", "name": "Dhruv Bais",     "plan": "internal"},
 }
 
-INTERCOM_TEST_APP_ID = "exajihyc"
+INTERCOM_TEST_APP_ID = "pa5i9ru1"  # Aisolv [DEV] — override via ?app=xxx on /test
 
 TEST_PAGE_HTML = f"""<!doctype html>
 <html lang="en">
@@ -127,7 +127,13 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
 
         if parsed.path in ("/test", "/test/"):
-            return self._html(200, TEST_PAGE_HTML)
+            # Allow ?app=xxx to override the Messenger app_id at request time
+            qs_here = parse_qs(parsed.query, keep_blank_values=True)
+            app_override = qs_here.get("app", [""])[0].strip()
+            html_out = TEST_PAGE_HTML
+            if app_override and re.fullmatch(r"[a-zA-Z0-9]{4,20}", app_override):
+                html_out = TEST_PAGE_HTML.replace(INTERCOM_TEST_APP_ID, app_override)
+            return self._html(200, html_out)
         if parsed.path == "/health":
             return self._json(200, {"ok": True, "customers_loaded": len(DB)})
         if parsed.path == "/_customers":
