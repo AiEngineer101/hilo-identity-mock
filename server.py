@@ -38,9 +38,9 @@ TEST_PAGE_HTML = f"""<!doctype html>
 </head>
 <body>
 <main>
-  <h1>Hilo Messenger - identity test page</h1>
+  <h1>Messenger identity test page</h1>
   <div class="sub">
-    Messenger connected to workspace <code>{INTERCOM_TEST_APP_ID}</code> (Hilo [TEST]). Click the widget bottom-right to open a chat and step through the identity Workflow.
+    Messenger connected to workspace <code>{INTERCOM_TEST_APP_ID}</code>. Click the widget bottom-right to open a chat and step through the identity Workflow. Override the workspace via <code>?app=xxx</code>.
   </div>
 
   <section>
