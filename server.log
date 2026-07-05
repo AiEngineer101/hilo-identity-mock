@@ -1,0 +1,3 @@
+127.0.0.1 - "GET /health HTTP/1.1" 200 -
+127.0.0.1 - "GET /?email=dhruv.bais+test1@aktiia.com HTTP/1.1" 404 -
+127.0.0.1 - "GET /?email=stranger@nowhere.com HTTP/1.1" 404 -
