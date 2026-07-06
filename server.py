@@ -155,7 +155,7 @@ class Handler(BaseHTTPRequestHandler):
         record = DB.get(email)
         if record:
             return self._json(200, {"found": True, "email": email, **record})
-        return self._json(404, {"found": False, "email": email})
+        return self._json(200, {"found": False, "email": email})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", sys.argv[1] if len(sys.argv) > 1 else "10000"))
